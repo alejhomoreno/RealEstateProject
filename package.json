@@ -1,0 +1,35 @@
+{
+  "name": "realestateproject",
+  "version": "1.0.0",
+  "description": "my first node.js project",
+  "keywords": [
+    "MVC",
+    "PUG",
+    "MYSQL",
+    "TAILWIND",
+    "SEQUELIZE"
+  ],
+  "homepage": "https://github.com/alejhomoreno/RealEstateProject#readme",
+  "bugs": {
+    "url": "https://github.com/alejhomoreno/RealEstateProject/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alejhomoreno/RealEstateProject.git"
+  },
+  "license": "ISC",
+  "author": "alejhomoreno",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
