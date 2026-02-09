@@ -5,8 +5,8 @@ const formLogin = (req, res) => {
 }
 
 const formRegister = (req, res) => {
-    res.render('auth/login',{
-    
+    res.render('auth/register',{
+     pageName: 'Create Account',
     })
 }
 
