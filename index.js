@@ -8,6 +8,9 @@ const app = express()
 app.set('view engine', 'pug');
 app.set('views', './views');
 
+// public
+app.use( express.static('public'))
+
 // Routes
 app.use('/auth', customerRoutes)
 
