@@ -1,5 +1,5 @@
 import express from 'express';
-import { formLogin, formRegister } from '../controller/usuarioController.js'
+import { formLogin, formRegister, formForget } from '../controller/usuarioController.js'
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get('/login', formLogin);
 router.get('/register', formRegister );
+router.get('/forget-password', formForget);
 
 export default router;

@@ -2,33 +2,34 @@ extends ../layout/index
 
 block contents
     div.py-10
-        h1.text-4xl.my-10.font-extrabold.text-center.text-gray-900 Bienes
-            span.font-normal Raices 
+        h1.text-4xl.my-10.font-extrabold.text-center.text-gray-900 Real
+            span.font-normal Estate 
         h2.text-center.text-2xl.font-extrabold= pageName
 
-        //- ESTE DIV ES EL QUE CENTRA TODO (mx-auto)
         .mt-8.mx-auto.max-w-md
-            //- ESTE ES EL RECTANGULO AZUL
+
             .bg-blue-50.py-8.px-4.shadow.rounded-lg
-                //- EL FORMULARIO ESTÁ DENTRO
+  
                 form.space-y-5
                     div 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Tu Nombre
-                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Tu Nombre" type="text" name="name")
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Your Name
+                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Name" type="Name" name="name")
                     
                     div 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Email de Registro
-                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Tu Email" type="email" name="email")
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Email register
+                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Email" type="email" name="email")
 
                     div 
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Password
-                        input#password.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Tu Password" type="password" name="password")
+                        input#password.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Password" type="password" name="password")
 
                     div 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Repetir Password
-                        input#repetir_password.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Repite tu Password" type="password" name="repetir_password")
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Repeat Password
+                        input#repeat_password.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Repeat Password" type="password" name="repeat_password")
 
-                    input(class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 cursor-pointer rounded-md" type="submit" value="Crear Cuenta")
+                    div.flex.items-center.justify-between
+                        a.text-sm.text-gray-400.text-xs(href="/auth/login") Already have an account?
+                        a.text-sm.text-gray-400.text-xs(href="/auth/forget-password") Forgot your password?
+                    
 
-                    div.flex.items-center.justify-between 
-                        a.text-gray-500.text-xs(href="/auth/login") ¿Ya tienes cuenta? Inicia Sesión
+                    input(class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 cursor-pointer rounded-md" type="submit" value="Create Account")
