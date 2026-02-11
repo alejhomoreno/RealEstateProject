@@ -25,13 +25,16 @@
     "start": "node index.js",
     "server": "nodemon index.js",
     "css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/app.css --watch"
-},
-
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.18",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "mysql2": "^3.17.0",
     "post-cli": "^1.0.5",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.24",
