@@ -16,13 +16,16 @@ block contents
             .bg-blue-50.py-8.px-4.shadow.rounded-lg
   
                 form.space-y-5(method="POST" action="/auth/register")
+                    input(type="hidden" name="_csrf" value=csrfToken)
                     div 
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Your Name
-                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Name" type="Name" name="name")
+                        input#name.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Name" type="Name" name="name"
+                        value=customer? customer.name: '')
                     
                     div 
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Email register
-                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Email" type="email" name="email")
+                        input#email.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Email" type="email" name="email"
+                        value=customer? customer.email: '')
 
                     div 
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold Password
