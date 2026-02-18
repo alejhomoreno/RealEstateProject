@@ -1,8 +1,9 @@
 import { check, validationResult } from 'express-validator';
 import Usuario from '../models/Usuario.js';
-import { generateToken } from '../helpers/tokens.js'
+import { generateJwt, generateToken } from '../helpers/tokens.js'
 import { emailRegister, emailforget } from '../helpers/email.js'
 import bcrypt from 'bcrypt';
+
 
 const formLogin = (req, res) => {
     res.render('auth/login', {
@@ -43,7 +44,14 @@ const authenticate = async (req, res) => {
             errors: [{ msg: 'Password is incorrect' }],
         })
     }
+
+    const token = generateJwt(user.id)
+    console.log(token);
+    return res.cookie('_token', token, {
+        httpOnly: true,
+    }).redirect('/my-properties')
 }
+
 
 const formRegister = (req, res) => {
     res.render('auth/register', {

@@ -1,9 +1,10 @@
 import 'dotenv/config';
 import express from 'express'
 import customerRoutes from './routes/customers.js';
+import propertiesRoutes from './routes/propertiesRoutes.js';
 import db from './config/db.js';
 import helmet from 'helmet';
-import { doubleCsrf } from 'csrf-csrf';   
+import { doubleCsrf } from 'csrf-csrf';
 import cookieParser from 'cookie-parser';
 
 
@@ -11,13 +12,21 @@ import cookieParser from 'cookie-parser';
 const app = express()
 
 // enable helmet
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-eval'", "https://unpkg.com", "https://cdnjs.cloudflare.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://fonts.googleapis.com"],
+        imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://unpkg.com"],
+        connectSrc: ["'self'", "https://*.tile.openstreetmap.org", "https://unpkg.com","https://geocode.arcgis.com"]
+    },
+}));
 
 // reading form
 app.use(express.urlencoded({ extended: true }))
 
 // enable cookie parser
-app.use(cookieParser());
+app.use(cookieParser())
 
 // configure csfr protection
 // 4. Configure CSRF
@@ -26,8 +35,8 @@ const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
   getSecret: () => "SUPER_SECRET_KEY_1234567890",
   cookieName: "x-csrf-token",
   cookieOptions: {
-    sameSite: "lax", 
-    secure: false, 
+    sameSite: "lax",
+    secure: false,
     signed: false
   },
   getCsrfTokenFromRequest: (req) => req.body._csrf,
@@ -48,7 +57,7 @@ app.use((req, res, next) => {
 // Database connection
 try {
   await db.authenticate();
-  db.sync();  
+  db.sync();
   console.log('Database connection has been established successfully.');
 } catch (error) {
   console.error('Unable to connect to the database:', error);
@@ -63,6 +72,7 @@ app.use(express.static('public'))
 
 // Routes
 app.use('/auth', customerRoutes)
+app.use('/', propertiesRoutes)
 
 
 
