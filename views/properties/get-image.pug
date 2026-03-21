@@ -14,8 +14,8 @@ block contents
             form( id="image" class="border-dashed border-2 w-full min-h-80 h-auto rounded flex flex-col justify-center items-center" method="POST" action=`/properties/get-image/${property.id}`)
                 input(type="hidden" name="_csrf" value=csrfToken)
 
-            input(id="upload-button" class="mt-5 w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase cursor-pointer"
-            type="submit" value="Upload Images")
+            button(id="upload-button" class="mt-5 w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase cursor-pointer"
+            type="button" ) Upload Image
                     
 block scripts 
     script(src="/js/addimagen.js")
