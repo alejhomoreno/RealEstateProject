@@ -1,0 +1,21 @@
+extends ../layout/admin
+
+block styles 
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css")
+    meta(name="csrf-token" content=csrfToken)
+    
+block contents
+    div
+        h1.text-4xl.my-2.font-extrabold.text-center.text-gray-900 Real
+            span.font-normal Estate 
+        h2.text-center.text-2xl.font-extrabold= pageName
+
+        div(class="bg-white shadow rounded mx-auto  my-10 md:px-10")
+            form( id="image" class="border-dashed border-2 w-full min-h-80 h-auto rounded flex flex-col justify-center items-center" method="POST" action=`/properties/get-image/${property.id}`)
+                input(type="hidden" name="_csrf" value=csrfToken)
+
+            input(id="upload-button" class="mt-5 w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase cursor-pointer"
+            type="submit" value="Upload Images")
+                    
+block scripts 
+    script(src="/js/addimagen.js")

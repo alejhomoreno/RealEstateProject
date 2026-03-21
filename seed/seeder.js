@@ -22,14 +22,15 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         await Promise.all([
-            tags.destroy({ where: {}, truncate: true }),
-            prices.destroy({ where: {}, truncate: true }),
+            
+            tags.destroy({ where: {} }), 
+            prices.destroy({ where: {} }),
         ])
-        console.log('Data delete...')
-        exit()
+        console.log('Data successfully deleted...')
+        process.exit(0) 
     } catch (error) {
         console.log(error)
-        exit(1)
+        process.exit(1)
     }
 }
 

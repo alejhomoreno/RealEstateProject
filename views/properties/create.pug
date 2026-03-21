@@ -1,4 +1,4 @@
-extends ../layout/index
+extends ../layout/admin
 
 block styles 
     link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
@@ -23,11 +23,11 @@ block contents
 
                 div
                     label.block.text-gray-700.font-bold.mb-2(for="title") Title
-                    input#title(type="text" name="title" placeholder="Property Title, ex. Beach house" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
+                    input#title(type="text" name="title" placeholder="Property Title, ex. Beach house" value= datos.title ? datos.title : '' class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
                 
                 div
                     label.block.text-gray-700.font-bold.mb-2(for="description") Description 
-                    textarea#description(name="description" placeholder="description " class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
+                    textarea#description(name="description" placeholder="description " class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")= datos.description ? datos.description : ''
 
 
                 div(class="md:flex gap-4 mt-4 mb-4 space-y-5 md:space-y-0")
@@ -37,14 +37,14 @@ block contents
                         select#tags(name="tags" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
                             option(value="") - Select - 
                             each tags in tag 
-                                option(value=tags.id)= tags.name
+                                option(value=tags.id selected= datos.tags ? datos.tags == tags.id ? true : false : null)= tags.name
 
                     div(class="md:w-1/2")
-                        label.block.text-gray-700.font-bold.mb-2(for="price") Price
-                        select#price(name="price" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
+                        label.block.text-gray-700.font-bold.mb-2(for="prices") Prices
+                        select#prices(name="prices" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600")
                             option(value="") - Select - 
-                            each prices in price  
-                                option(value=prices.id)= prices.name
+                            each prices in price
+                                option(value=prices.id selected= datos.prices ? datos.prices == prices.id ? true : false : null)= prices.name
 
                 div(class="md:flex gap-4 mt-4 mb-4 space-y-5 md:space-y-0")
 
@@ -54,7 +54,7 @@ block contents
                             option(value="") - Select - 
                             - var n = 1;
                             - while (n < 6)
-                                option(value=n) #{n++}
+                                option(value=n selected= datos.bedrooms ? datos.bedrooms == n  ? true : false : null) #{n++}
 
                     div(class="md:w-1/3")
                         label.block.text-gray-700.font-bold.mb-2(for="garage") Garage
@@ -62,7 +62,7 @@ block contents
                             option(value="") - Select - 
                             - var n = 1;
                             - while (n < 4)
-                                option(value=n) #{n++}
+                                option(value=n selected= datos.garage ? datos.garage == n  ? true : false : null) #{n++}
 
                     div(class="md:w-1/3")
                         label.block.text-gray-700.font-bold.mb-2(for="wc") WC
@@ -70,7 +70,7 @@ block contents
                             option(value="") - Select - 
                             - var n = 1;
                             - while (n < 6)
-                                option(value=n) #{n++}
+                                option(value=n selected= datos.wc ? datos.wc == n  ? true : false : null) #{n++}
 
                 div.border-gray-200.border-t.py-5.space-y-5                           
                     h3.text-lg.leading-6.font-medium.text-gray-900 Location
@@ -78,11 +78,11 @@ block contents
                     #mapa.h-96
 
                     div 
-                        p.calle
+                        p.calle= datos.calle ? datos.calle : ''
 
-                    input(type="hidden" name="calle" id="calle")
-                    input(type="hidden" name="lat"  id="lat")
-                    input(type="hidden" name="lng" id="lng")
+                    input(type="hidden" name="calle" id="calle" value= datos.calle ? datos.calle : '')
+                    input(type="hidden" name="lat"  id="lat" value= datos.lat ? datos.lat : '')
+                    input(type="hidden" name="lng" id="lng" value= datos.lng ? datos.lng : '')
                 
                 input(class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold uppercase cursor-pointer" type="submit" value="Add Image")
 block scripts 

@@ -49,7 +49,7 @@ const authenticate = async (req, res) => {
     console.log(token);
     return res.cookie('_token', token, {
         httpOnly: true,
-    }).redirect('/my-properties')
+    }).redirect('/properties')
 }
 
 

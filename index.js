@@ -15,8 +15,10 @@ const app = express()
 app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-eval'", "https://unpkg.com", "https://cdnjs.cloudflare.com"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://fonts.googleapis.com"],
+        // I removed cdnjs from here...
+        scriptSrc: ["'self'", "'unsafe-eval'", "https://unpkg.com"], 
+        // ...and added it here so your CSS file can load!
+        styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"], 
         imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://unpkg.com"],
         connectSrc: ["'self'", "https://*.tile.openstreetmap.org", "https://unpkg.com","https://geocode.arcgis.com"]
     },
@@ -39,7 +41,9 @@ const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
     secure: false,
     signed: false
   },
-  getCsrfTokenFromRequest: (req) => req.body._csrf,
+  getCsrfTokenFromRequest: (req) => {
+      return req.body?._csrf || req.headers['csrf-token'];
+  },
   getSessionIdentifier: (req) => "temp_identifier_for_public_users"
 });
 
