@@ -1,25 +1,61 @@
-import {unlink } from 'node:fs/promises'
+import { unlink } from 'node:fs/promises'
 import { validationResult } from 'express-validator'
-import { prices, tags, properties } from '../models/index.js'
+import { prices, tags, properties, Message, Usuario } from '../models/index.js'
+import { isSeller, formatDate  } from '../helpers/index.js'
 
 
 const admin = async (req, res) => {
 
-    const { id } = req.client
-    const propertiesadmin = await properties.findAll({
-        where: {
-            usuarioId: id
-        },
-        include: [
-            { model: tags, as: 'tag' },
-            { model: prices, as: 'price' }
-        ]
-    })
+    // read query
+    const { pageName: page } = req.query
+    const validPages = /[^0-9$]/
 
-    res.render('properties/admin', {
-        pageName: 'My Properties',
-        properties: propertiesadmin
-    })
+    if (validPages.test(page)) {
+        return res.redirect('/properties?pageName=1')
+    }
+    try {
+        const { id } = req.client
+
+        const limit = 3
+        const offset = ((page * limit) - limit)
+
+        const [propertiesadmin, total] = await Promise.all([
+
+            properties.findAll({
+                limit,
+                offset,
+                where: {
+                    usuarioId: id
+                },
+                include: [
+                    { model: tags, as: 'tag' },
+                    { model: prices, as: 'price' },
+                    { model: Message, as: 'messages' }
+                ]
+            }),
+            properties.count({
+                where: {
+                    usuarioId: id
+                }
+            })
+
+        ])
+
+        res.render('properties/admin', {
+            pageName: 'My Properties',
+            propertiesadmin,
+            page: Math.ceil(total / limit),
+            pageActual: page,
+            total,
+            offset,
+            limit
+
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 const create = async (req, res) => {
@@ -186,10 +222,10 @@ const saveChanges = async (req, res) => {
         return res.redirect('/properties')
 
     }
-    
+
     try {
         const { title, description, bedrooms, garage, wc, calle, lat, lng, prices: priceId, tags: tagId } = req.body
-        
+
         const { id: usuarioId } = req.client
 
         property.set({
@@ -206,7 +242,7 @@ const saveChanges = async (req, res) => {
         })
         await property.save()
         res.redirect('/properties')
-     } catch (error) {
+    } catch (error) {
         console.log(error)
     }
 
@@ -227,30 +263,143 @@ const delet = async (req, res) => {
     }
 
     await unlink(`public/uploads/${property.img}`)
-    console.log('Image deleted successfully')  
+    console.log('Image deleted successfully')
 
     await property.destroy()
     res.redirect('/properties')
 }
 
+// change status 
+
+const changeStatus = async (req, res) => {
+    console.log("changeStatus.......")
+    const { id } = req.params
+
+    const property = await properties.findByPk(id)
+
+    if (!property) {
+        return res.redirect('/properties')
+    }
+
+    if (req.client.id.toString() !== property.usuarioId.toString()) {
+        return res.redirect('/properties')
+
+    }
+    property.published = !property.published
+    await property.save()
+    res.json({ result: 'success' })
+}
+
 const show = async (req, res) => {
     const { id } = req.params
 
-    const property = await properties.findByPk(id,{
-            include: [
-                {model: tags, as: 'tag'},
-                {model: prices, as: 'price'}
-            ]
+    const property = await properties.findByPk(id, {
+        include: [
+            { model: tags, as: 'tag' },
+            { model: prices, as: 'price' }
+        ]
     })
 
     if (!property) {
         return res.redirect('/404')
     }
+
+
+
+
+    let isUserSeller = false;
+
+    if (req.user) {
+        console.log("My User ID is:", req.user.id);
+        console.log("The Property's User ID is:", property.usuarioId);
+
+        isUserSeller = isSeller(req.user?.id, property.usuarioId);
+    }
+
+    console.log("Is the current user the seller?", isUserSeller);
+
     res.render('properties/show', {
         pageName: 'Property Detail',
-        property
+        property,
+        user: req.user,
+        isSeller: isUserSeller
+    })
+}
+
+const sendMessage = async (req, res) => {
+    const { id } = req.params
+
+    const property = await properties.findByPk(id, {
+        include: [
+            { model: tags, as: 'tag' },
+            { model: prices, as: 'price' }
+        ]
     })
 
+    if (!property) {
+        return res.redirect('/404')
+    }
+
+    let result = validationResult(req);
+
+
+    if (!result.isEmpty()) {
+
+
+        return res.render('properties/show', {
+            pageName: 'Property Detail',
+            property,
+            user: req.user,
+            isSeller: isSeller(req.user?.id, property.usuarioId),
+            errors: result.array()
+        })
+    }
+
+    const { message } = req.body;
+    const { id: usuarioId } = req.user;
+    const { id: propertyId } = req.params;
+
+    await Message.create({
+        message,
+        usuarioId,
+        propertyId
+    })
+
+    res.redirect('/')
+}
+const viewsMessage = async (req, res) => {
+    const { id } = req.params;
+
+    const property = await properties.findByPk(id, {
+        include: [
+            {
+                model: Message, as: 'messages',
+                include: [
+                    { model: Usuario },
+                ]
+            }
+        ],
+    })
+    if (!property) {
+        return res.redirect('/properties');
+    }
+
+    // 1. Let's print the values to the terminal to see what is missing!
+    console.log("User ID is:", req.user?.id); // Try checking req.user instead!
+    console.log("Client ID is:", req.client?.id);
+    console.log("Property UsuarioId is:", property.usuarioId);
+
+    // 2. Safely check the IDs (assuming your middleware uses req.user)
+    // Optional chaining (?) prevents the app from crashing if the object is missing
+    if (req.user?.id.toString() !== property.usuarioId?.toString()) {
+        return res.redirect('/properties');
+    }
+
+    res.render('properties/messages', {
+        pageName: 'Messages',
+        property,
+        formatDate
+    });
 }
 
 export {
@@ -262,5 +411,8 @@ export {
     edit,
     saveChanges,
     delet,
-    show
+    changeStatus,
+    show,
+    sendMessage,
+    viewsMessage
 }

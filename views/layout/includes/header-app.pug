@@ -1,9 +1,24 @@
 header.bg-indigo-600.p-4
     .container.mx-auto.flex.justify-between.items-center
-        h1.text-2xl.text-white.font-extrabold.text-center Real
-            span.font-normal Estate
+        a(href="/" )
+            h1.text-2xl.text-white.font-extrabold.text-center Real
+                span.font-normal Estate
         
-        nav(class="text-sm md:flex md:items-center md:gap-3 font-bold text-white")
-            a(href="") My Properties
-            a(href="") Profile 
-            a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="") Log Out
+        nav(class="my-2 text-sm md:flex md:items-center md:gap-3 font-bold text-white")
+            a(href="/auth/register") Create Account
+            a(href="/auth/login") Log In
+
+div(class="bg-indigo-700 py-2 px-6 hidden lg:block text-center")
+    div(class="container mx-auto flex justify-between items-center")
+        nav(class="flex gap-4 items-center")
+            a(href="/tags/16" class="text-sm font-bold uppercase text-white") House 
+            a(href="/tags/17" class="text-sm font-bold uppercase text-white") Apartment
+            a(href="/tags/18" class="text-sm font-bold uppercase text-white") Warehouse  
+            a(href="/tags/19" class="text-sm font-bold uppercase text-white") Land 
+            a(href="/tags/20" class="text-sm font-bold uppercase text-white") Cabin
+        
+        form(action="/search" method="POST" class="flex gap-3 items-center")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            label(for="term" class="text-sm uppercase font-bold text-white") Search:
+            input(type="text" name="term" id="term" placeholder="Search by title..." class="p-2 rounded-lg shadow text-sm")
+            input(type="submit" class="bg-indigo-800 hover:bg-indigo-400 rounded-lg text-white uppercase font-bold p-2 cursor-pointer text-sm" value="Go") 

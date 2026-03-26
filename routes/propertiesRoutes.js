@@ -1,8 +1,10 @@
 import express from "express";
 import { body } from 'express-validator';
-import { admin, create, save, getImage, storeImage, edit, saveChanges, delet, show} from '../controller/propertiesController.js';
+import { admin, create, save, getImage, storeImage, edit, saveChanges, delet,changeStatus, show, sendMessage, viewsMessage} from '../controller/propertiesController.js';
 import protectRoute from "../middleware/protectRoute.js";
 import upload from '../middleware/uploadFile.js';
+import indeticarUser from "../middleware/indeticarUser.js";
+
 
 const router = express.Router();
 
@@ -57,11 +59,29 @@ router.post('/properties/delete/:id',
     delet
 )
 
+router.put('/properties/:id',
+    protectRoute,
+    changeStatus
+)
+
 // area public
+
 router.get('/properties/:id',
+    indeticarUser,
     show
 )
 
+// store message
 
+router.post('/properties/:id',
+    indeticarUser,
+    body('message').notEmpty().withMessage('The message cannot be empty').isLength({ min: 10 }),
+    sendMessage
+)
+
+router.get('/messages/:id',
+    protectRoute,
+    viewsMessage
+)
 
 export default router;

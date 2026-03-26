@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express'
 import customerRoutes from './routes/customers.js';
 import propertiesRoutes from './routes/propertiesRoutes.js';
+import appRoutes from './routes/appRoutes.js';
+import apiRoutes from './routes/apiRoutes.js';
 import db from './config/db.js';
 import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
@@ -75,8 +77,10 @@ app.set('views', './views');
 app.use(express.static('public'))
 
 // Routes
+app.use('/', appRoutes)
 app.use('/auth', customerRoutes)
 app.use('/', propertiesRoutes)
+app.use('/api', apiRoutes)
 
 
 

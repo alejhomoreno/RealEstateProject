@@ -1,0 +1,27 @@
+extends ./layout/app
+
+block contents
+                
+    section(class="py-5")
+        // Using the dynamic variable from your controller!
+        h2(class="text-center text-4xl font-extrabold pt-10")= pageName
+
+
+        if properties.length
+            div(class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-14")
+                each house in properties
+                    div(class="bg-white shadow rounded-lg")
+                        // Updated the alt text for better English
+                        img(class="object-cover h-72 w-full" src=`/uploads/${house.img}` alt=`Image of ${house.title}`)
+                        div(class="p-5 space-y-3")
+                            h3(class="text-2xl font-bold")= house.title
+                            // Corrected the capitalization of Bedroom
+                            p(class="text-sm text-gray-600") Bedroom: 
+                                span(class="font-bold")= house.bedroom
+                            p(class="text-sm text-gray-600") WC: 
+                                span(class="font-bold")= house.wc
+                            p(class="text-sm text-gray-600") Price:  
+                                span(class="font-bold")= house.price.name 
+                            a(href=`/properties/${house.id}` class="mt-12 block w-full text-center bg-indigo-600 text-white font-bold py-3 uppercase rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md") View Property
+        else 
+            p(class="text-center text-gray-600 mt-10") No properties found for this tag. Please check back later!

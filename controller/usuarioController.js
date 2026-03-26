@@ -46,9 +46,10 @@ const authenticate = async (req, res) => {
     }
 
     const token = generateJwt(user.id)
-    console.log(token);
     return res.cookie('_token', token, {
         httpOnly: true,
+        path: '/'
+        
     }).redirect('/properties')
 }
 
