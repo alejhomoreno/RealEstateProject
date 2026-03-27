@@ -300,7 +300,7 @@ const show = async (req, res) => {
         ]
     })
 
-    if (!property) {
+    if (!property || !property.published) {
         return res.redirect('/404')
     }
 
@@ -336,7 +336,7 @@ const sendMessage = async (req, res) => {
         ]
     })
 
-    if (!property) {
+    if (!property ) {
         return res.redirect('/404')
     }
 
